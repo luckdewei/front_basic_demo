@@ -1,16 +1,11 @@
-import MyPromise from './MyPromise.js'
 
-let p1 = new MyPromise((resolve, reject) => {
-  resolve(1)
-})
-
-p1.then((res) => {
-  console.log(res)
-  return 1000
-}).then(res => {
-  throw new Error('error')
-}).then(res => {
-  console.log(res);
-},(error) => {
-  console.log('error', error);
-})
+const promisesAplusTest = require('promises-aplus-tests');
+const myPromise = require('./MyPromise'); // 假设你的Promise实现在这个文件中
+ 
+promisesAplusTest(myPromise, (err) => {
+    if (err) {
+        console.error("Promises A+ tests failed:", err);
+    } else {
+        console.log("Promises A+ tests passed!");
+    }
+});
