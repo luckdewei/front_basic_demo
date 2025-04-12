@@ -1,17 +1,16 @@
-let p1 = new Promise((resolve, reject) => {
+import MyPromise from './MyPromise.js'
+
+let p1 = new MyPromise((resolve, reject) => {
   resolve(1)
 })
 
-let p2 = new Promise((resolve, reject) => {
-  reject(1)
+p1.then((res) => {
+  console.log(res)
+  return 1000
+}).then(res => {
+  throw new Error('error')
+}).then(res => {
+  console.log(res);
+},(error) => {
+  console.log('error', error);
 })
-
-let p3 = new Promise((resolve, reject) => {
-  throw('报错')
-})
-
-console.log('p1', p1);
-
-console.log('p2', p2);
-
-console.log('p3', p3)
