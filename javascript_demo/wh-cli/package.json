@@ -1,0 +1,18 @@
+{
+  "name": "wh-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "webpack": "^5.99.5"
+  },
+  "devDependencies": {
+    "webpack-cli": "^6.0.1"
+  }
+}
