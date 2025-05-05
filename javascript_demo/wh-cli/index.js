@@ -1,11 +1,5 @@
-function myPromise(executor) {
-  let self = this;
-  self.status = 'pending';
-  self.onFulfilled = [];
+const fn = () => {
+  console.log('hello world');
 }
 
-const foo = () => {
-  console.log("hello");
-}
-
-foo();
+fn()
