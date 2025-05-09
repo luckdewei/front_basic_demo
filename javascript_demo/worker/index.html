@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./index.js"></script>
+</head>
+<body>
+  <button onclick="onStart()">开始</button>
+</body>
+<script>
+  function onStart() {
+    console.log('开始', Date.now());
+    CountDown(1746773995992, 1746773990992, () => {console.log('结束', Date.now())});
+  }
+
+  
+
+</script>
+</html>
