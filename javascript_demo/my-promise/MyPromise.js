@@ -150,5 +150,33 @@ MyPromise.deferred = function () {
   return result;
 }
 
+MyPromise.all = function(promises) {
+  return new MyPromise((resolve, reject) => {
+    if (!Array.isArray(promises)) return reject('error');
+    if (promises.length === 0) return resolve([]);
+    for (let i = 0; i < promises.length; i++) {
+      if (!promises[i] instanceof MyPromise) {
+        promises[i] = new MyPromise(resolve => resolve(promises[i]));
+      }
+    }
+    let result = [];
+    let count = 0;
+    for (let i = 0; i < promises.length; i++) {
+      promises[i].then(data => {
+        result[i] = data;
+        count++;
+        if (count === promises.length) resolve(result);
+      }, reject);
+    }
+  });
+}
+
+MyPromise.finally = function(onFinally) {
+  return this.then(
+    value => MyPromise.resolve(onFinally()).then(() => value),
+    reason => MyPromise.resolve(onFinally()).then(() => { throw reason })
+  );
+}
+
 
 module.exports = MyPromise;

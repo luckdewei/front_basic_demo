@@ -16,7 +16,6 @@ var threeSumClosest = function(nums, target) {
     let near = 999999;
     let res = 0
     nums = nums.sort((a, b) => a - b)
-    // [-5, -5, -4, 0, 0, 3, 3, 4, 5]
     for (let i = 0; i<len; i++) {
       let l = i+1
       let r = len - 1

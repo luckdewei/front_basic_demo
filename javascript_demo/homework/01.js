@@ -229,6 +229,8 @@ console.log(4);
 
 // 1 2 4 timerStart timerEnd success
 
+
+
 async function foo() {
   console.log("foo");
 }
@@ -256,7 +258,11 @@ new Promise(function (resolve) {
 
 console.log("script end");
 
-// script start-》 bar start-》foo-》promise start-》bar end -》script end-》promise end-》setTimeout
+// 主线程执行同步任务 script start, 遇到setTimeout开始计时， 结束后放入宏任务队列, 执行bar(), bar start, await 执行foo()
+// 输出foo, await 会将右侧方法转成Promise.resolve()，console.log("bar end"); 会被放入微任务队列，主线程释放继续执行async外的同步任务，输出 "promise start"
+// .then()执行将方法放入微任务队列， 输出script end， 同步任务结束，执行微任务bar end -》promise end-》微任务结束，执行宏任务 setTimeout
+
+// script start-》 bar start-》foo-》promise start-》script end-》bar end -》promise end-》setTimeout
 
 async function asy1() {
   console.log(1);
@@ -283,10 +289,17 @@ asy1();
 console.log(7);
 asy3();
 
+
 // 1 7 6 4 3 2
 
 // 错误 答案：1 7 6 2 4 3
-// await 对 setTimeout 宏任务不等待
+
+
+// 执行asy1 await asy2 执行 asy2 遇到setTimeout 开始倒计时，倒计时结束放入宏任务队列，然后将asy2=》 Primise.resolve(asy2)， console.log(2);放入微任务队列， 然后让出主线程继续执行，输出7，asy3将.then，放入微队列
+// 同步任务执行结束，开始执行微任务队列，输出
+
+
+
 
 // 手写 .all方法
 Promise.prototype.all = (promises) => {
@@ -374,7 +387,7 @@ const shape = {
 
 shape.diameter(); // 20
 shape.perimeter(); // 20*Math.PI  做错 答案：NaN
-
+// () => {} 箭头函数 this 指向window
 
 
 
@@ -449,6 +462,12 @@ Person.getFullName = () => {
 console.log(member.getFullName());
 // 报错 getFullName 找不到 member 上找不到会向上级原型链找 member.__proto__ = Person.prototype,
 // Person.prototype上找不到 getFullName
+
+
+
+
+
+
 
 function Person(firstName, lastName) {
   this.firstName = firstName;
@@ -549,4 +568,74 @@ const baz = () => console.log('Third')
 
 bar()
 foo()
-baz()
+baz() // First Third Second
+
+
+
+
+
+const person = {name: 'Lydia'}
+
+function sayHi(age) {
+  return `${this.name} is ${age}`
+}
+
+sayHi.call(person, 21) // Lydia is 21
+sayHi.bind(person, 21) // function sayHi() { return `${this.name} is 21` }
+
+
+
+
+
+
+const numbers = [1, 2, 3]
+numbers[10] = 11
+console.log(numbers) // [1, 2, 3, undefined * 7, 11]
+
+
+
+
+
+
+
+(() => {
+  let x, y;
+  try {
+    throw new Error();
+  } catch(x) {
+    (x = 1), (y = 2);
+    console.log('c', x) // 1
+  }
+  console.log('x', x) // undefined
+  console.log('y', y) // 2
+})()
+
+
+
+
+
+[[0, 1], [2, 3]].reduce(
+  (acc, cur) => {
+    return acc.concat(cur)
+  }, 
+  [1, 2] // acc 初始值
+) // [1, 2, 0, 1, 2, 3]
+
+
+
+
+
+
+
+var a = {}, b = '123', c = 123;
+a[b] = 'b' // a['123'] = 'b'
+a[c] = 'c' // a[123] = a['123'] = 'c'
+console.log(a[b]) // 'c'
+
+
+
+
+var a = {}, b = {key: '123'}, c = {key: '456'}
+a[b] = 'b' // a[[object object]] = 'b'
+a[c] = 'c' // a[[object object]] = 'c'
+console.log(a[b]) // 'c'
