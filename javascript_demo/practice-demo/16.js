@@ -19,15 +19,19 @@ var threeSumClosest = function(nums, target) {
     // [-5, -5, -4, 0, 0, 3, 3, 4, 5]
     for (let i = 0; i<len; i++) {
       let l = i+1
-      let r = i+2
-      while(r<len) {
+      let r = len - 1
+      while (l<r) {
         let an = nums[i] + nums[l] + nums[r]
         let abs = Math.abs(an-target)
         if (abs < near) {
           near = abs
           res = an
         }
-        r++
+        if (an<target) {
+          l++
+        } else {
+          r--
+        }
       }
     }
     return res
