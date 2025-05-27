@@ -76,7 +76,7 @@ class MyPromise {
 }
 
 Promise.prototype.all = (promises) => {
-  return Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if (!Array.isArray(promises)) reject('promises is not array')
 
     if (promises.length === 0) return resolve([]);
