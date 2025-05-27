@@ -1,5 +1,7 @@
 // leetcode 5 最长回文串
 
+// 事件复杂度 O(n^3)  空间复杂度O(1)
+
 var longestPalindrome = function (s) {
   const len = s.length;
   let maxStr = s[0];
@@ -34,6 +36,7 @@ var isPls = function (s) {
 
 
 // leetcode 11 盛最多的水
+// 时间复杂度 O(N) 空间复杂度 O(1)
 var maxArea = function (height) {
     let len = height.length;
     let L = 0,
@@ -52,6 +55,7 @@ var maxArea = function (height) {
 };
 
 // leetcode 15 三数之和
+// 时间复杂度: O(N^2) 空间复杂度: O(1)
 var threeSum = (nums) => {
     let res = [];
     const len = nums.length;
@@ -82,6 +86,7 @@ var threeSum = (nums) => {
 };
 
 // leetcode 16 最接近的三数之和
+// 时间复杂度：O(N^2)
 
 var threeSumClosest = function(nums, target) {
     const len = nums.length;

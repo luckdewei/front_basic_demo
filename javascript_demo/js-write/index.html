@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <input id="input" />
+    </div>
+  </body>
+  <script>
+    function throttle(fn, delay) {
+      let timer = null
+      return function(...args) {
+        if (timer) return
+        timer = setTimeout(() => {
+          fn.apply(this, args)
+          timer = null
+        }, delay)
+      }
+    }
+
+    function debounce(fn, delay) {
+      let timer = null
+      return function(...args) {
+        if (timer) {
+          clearTimeout(timer)
+        }
+
+          timer = setTimeout(() => {
+            fn.apply(this, args)
+            timer = null
+          }, delay)
+
+      }
+    }
+
+
+    document.getElementById('input').addEventListener('keyup', (e) => {
+     let value = e.target.value;
+     inputVal(value);
+   })
+  
+   var inputVal = debounce(request, 500)
+
+
+    function request(val) {
+      console.log('发送请求', val)
+    }
+  </script>
+</html>
