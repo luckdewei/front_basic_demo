@@ -21,34 +21,29 @@
 //       if (j - 1 >= len) {
 //         return res
 //       }
-//       let an = 
+//       let an =
 //       res.push(an)
 //     }
 //   return res
 // }; // 超时
 
 // 单调队列
-class Queue {
-  constructor() {
-    this.queue = []
-  }
-  pop() {
-    return this.queue.shift()
-  }
-  push(val) {
-    while(this.queue[0] <= val) {
-      this.pop()
+var maxSlidingWindow = function (nums, k) {
+  const ans = [];
+  const q = [];
+  for (let i = 0; i < nums.length; i++) {
+    while (q.length && nums[q[q.length - 1]] <= nums[i]) {
+      q.pop();
     }
-    this.queue.push(val)
+    q.push(i);
+    if (i - q[0] >= k) {
+      q.shift();
+    }
+    if (i >= k - 1) {
+      ans.push(nums[q[0]]);
+    }
   }
-  getMaxVal() {
+  return ans;
+};
 
-  }
-}
-
-var maxSlidingWindow = function(nums, k) {
-
-}
-
-
-console.log(maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3))
+console.log(maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3));
