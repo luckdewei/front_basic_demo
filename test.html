@@ -6,13 +6,24 @@
   <title>Document</title>
 </head>
 <body>
-  <canvas id="canvas" width="400" height="400"></canvas>
-  <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const width = canvas.width;
-    const height = canvas.height;
-    
-  </script>
+  <!-- 在原有class中加入一下class标示所属dom区域是属于哪一个区域 -->
+  <div class="page">
+    <!-- 宣传主题区 -->
+    <div class="yzf-promotion_theme-area">
+      ....
+    </div>
+    <!-- 订购操作区 -->
+    <div class="yzf-user_action-area">
+      ....
+    </div>
+    <!-- 权益展示区 -->
+    <div class="yzf-content_show-area">
+      ....
+    </div>
+    <!-- 产品说明区 -->
+    <div class="yzf-product_description-area">
+      ....
+    </div>
+  </div>
 </body>
 </html>

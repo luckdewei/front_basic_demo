@@ -14,13 +14,13 @@ class MyPromise {
       if (this.status!==PENDING) return
       this.value = value
       this.status = FULFILLED
-      this.onFulfilledCallbacks(callback => callback())
+      this.onFulfilledCallbacks.forEach(callback => callback())
     }
     const reject = (reason) => {
       if (this.status!==PENDING) return
       this.reason = reason
       this.status = REJECTED
-      this.onRejectedCallbacks(callback => callback())
+      this.onRejectedCallbacks.forEach(callback => callback())
     }
     try {
       executor(resolve, reject)
@@ -31,69 +31,99 @@ class MyPromise {
   then(onFulfilled, onRejected) {
     onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : value => value
     onRejected = typeof onRejected === 'function' ? onRejected: reason => {throw reason}
-    if (this.status === FULFILLED) {
-      setTimeout(() => {
-        try {
-          onFulfilled(this.value)
-        } catch (error) {
-          reject(error)
-        }
-      })
-    }
-
-    if (this.status === REJECTED) {
-      setTimeout(() => {
-        try {
-          onRejected(this.reason)
-        } catch (error) {
-          reject(error)
-        }
-      })
-    }
-
-    if (this.status === PENDING) {
-      onFulfilledCallbacks.push(() => {
+    let p2 = new MyPromise((resolve, reject) => {
+      if (this.status === FULFILLED) {
         setTimeout(() => {
           try {
-            onFulfilled(this.value)
+            let x = onFulfilled(this.value)
+            resolvePromise(p2, x, resolve, reject)
           } catch (error) {
             reject(error)
           }
         })
-      })
-
-      this.onRejectedCallbacks.push(() => {
+      }
+  
+      if (this.status === REJECTED) {
         setTimeout(() => {
           try {
-            onRejected(this.reason)
+            let x = onRejected(this.reason)
+            resolvePromise(p2, x, resolve, reject)
           } catch (error) {
             reject(error)
           }
         })
-      })
-    }
+      }
+  
+      if (this.status === PENDING) {
+        onFulfilledCallbacks.push(() => {
+          setTimeout(() => {
+            try {
+              let x = onFulfilled(this.value)
+              resolvePromise(p2, x, resolve, reject)
+            } catch (error) {
+              reject(error)
+            }
+          })
+        })
+  
+        this.onRejectedCallbacks.push(() => {
+          setTimeout(() => {
+            try {
+              let x = onRejected(this.reason)
+              resolvePromise(p2, x, resolve, reject)
+            } catch (error) {
+              reject(error)
+            }
+          })
+        })
+      }
+    })
+    return p2
   }
 }
 
-Promise.prototype.all = (promises) => {
-  return new Promise((resolve, reject) => {
-    if (!Array.isArray(promises)) reject('promises is not array')
-
-    if (promises.length === 0) return resolve([]);
-
-    for (let i = 0; i < promises.length; i++) {
-      if (!promises[i] instanceof MyPromise) {
-        promises[i] = new MyPromise(resolve => resolve(promises[i]));
+function resolvePromise(p2, x, resolve, reject) {
+  if (p2 === x) return new reject(new Error('xxxx'))
+  if (x !==null && (typeof x === 'object' || typeof x === 'function')) {
+    let called = false
+    try {
+      let then = x.then
+      if (typeof then === 'function') {
+        then.call(
+          x,
+          y => {
+            if (called) return
+            called = true
+            resolvePromise(p2, y, resolve, reject)
+          },
+          r => {
+            if (called) return
+            called = true
+            reject(r)
+          }
+        )
+      } else {
+        resolve(x)
       }
+    } catch (error) {
+      if (called) return
+      called = true
+      reject(error)
     }
-    let result = [];
-    let count = 0;
-    for (let i = 0; i < promises.length; i++) {
-      promises[i].then(data => {
-        result[i] = data;
-        count++;
-        if (count === promises.length) resolve(result);
-      }, reject);
-    }
-  }) 
+  } else {
+    resolve(x)
+  }
 }
+
+
+let p1 = new MyPromise((resolve, reject) => {
+  resolve(1)
+})
+
+let p2 = new MyPromise((resolve, reject) => {
+  reject(1)
+})
+
+let p3 = new MyPromise((resolve, reject) => {
+  throw('报错')
+})
