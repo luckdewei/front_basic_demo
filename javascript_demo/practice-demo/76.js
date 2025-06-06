@@ -6,41 +6,36 @@
  * @return {string}
  */
 var minWindow = function (s, t) {
-  const map = new Array(128).fill(0);
-  const m = s.length,
-    n = t.length;
-
-  for (let char of t) {
-    map[char.charCodeAt()]++;
+  let map = new Map()
+  let len = s.length
+  let an = ''
+  for(let s of t) {
+    map.set(s, (map.get(s) || 0) + 1)
   }
-
-  let cnt = 0;
-  for (let num of map) {
-    if (num > 0) cnt++;
-  }
-
-  let res = "";
-
-  for (let i = 0, j = 0, c = 0; i < m; i++) {
-    const rcode = s.charCodeAt(i);
-
-    map[rcode]--;
-    if (map[rcode] === 0) {
-      c++;
+  let dif = map.size
+  let l = 0, r = 0
+  while(r<len) {
+    if(map.has(s[r])) {
+      map.set(s[r], map.get(s[r])-1)
     }
-
-    if (c === cnt) {
-      while (j <= i && map[s.charCodeAt(j)] < 0) {
-        map[s.charCodeAt(j++)]++;
-      }
-      if (res === "" || i - j + 1 < res.length) {
-        res = s.substring(j, i + 1); // 修正切片参数
-      }
+    if (map.get(s[r]) === 0) {
+      dif-- 
     }
+    while(dif === 0) {
+      let newAn = s.substring(l, r+1)
+      if (newAn.length < an.length || an == '') {
+        an = newAn
+      }
+      if(map.has(s[l])) {
+        if(map.get(s[l]) === 0) dif++
+        map.set(s[l], map.get(s[l]) + 1)
+      }
+      l++
+    }
+    r++
   }
-
-  return res;
-};
+  return an
+}
 
 
 
