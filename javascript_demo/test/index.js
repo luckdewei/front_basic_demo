@@ -1,8 +1,8 @@
-function asyncAdd(a, b, callback) {
-  setTimeout(() => {
-    callback(a + b);
-  }, 50);
-}
+// function asyncAdd(a, b, callback) {
+//   setTimeout(() => {
+//     callback(a + b);
+//   }, 50);
+// }
 
 // function sum(...args) {
 //   return new Promise((resolve, reject) => {
@@ -32,7 +32,7 @@ function asyncAdd(a, b, callback) {
 //   return an;
 // }
 
-sum(1, 2, 3, 4, 5, 6).then((value) => console.log(value));
+// sum(1, 2, 3, 4, 5, 6).then((value) => console.log(value));
 
 // function curriedSum() {
 //   let args = Array.from(arguments);
@@ -52,3 +52,16 @@ sum(1, 2, 3, 4, 5, 6).then((value) => console.log(value));
 // }
 
 // console.log(curriedSum(1)(2)(3)());
+
+
+var target = {
+  m: function() {
+    console.log(this == proxy)
+  }
+};
+var handler = {};
+var proxy = new Proxy(target, handler);
+// proxy.a = 'b';
+// target.a // "b"
+
+target.m()
