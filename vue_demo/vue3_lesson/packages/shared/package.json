@@ -1,0 +1,12 @@
+{
+  "name": "@vue/shared",
+  "description": "",
+  "module": "dist/reactivity.esm-bundler.js",
+  "scripts": {},
+  "buildOptions": {
+    "formats": [
+      "esm-bundler",
+      "cjs"
+    ]
+  }
+}

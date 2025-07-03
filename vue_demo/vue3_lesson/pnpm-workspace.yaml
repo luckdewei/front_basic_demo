@@ -1,0 +1,2 @@
+packages:
+  - 'packages/*' # 包管理在packages目录下
