@@ -17,6 +17,51 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
-var permute = function (nums) {
-  const dfs = () => {};
+var permute = function(nums) {
+  let len = nums.length
+  let ans = []
+  let p = new Array(len).fill(0)
+  const dfs = (i, s) => {
+    // 边界条件
+    if (i == len) {
+      ans.push([...p])
+      return
+    }
+    for(x of s) {
+      p[i] = x
+      let s1 = new Set(s)
+      s1.delete(x)
+      dfs(i+1, s1)
+    }
+  }
+  dfs(0, new Set(nums));
+  return ans
 };
+
+
+
+var permute = function (nums) {
+    let len = nums.length
+    let ans = []
+    let p = new Array(len).fill(0)
+    let on_path = new Array(len).fill(false)
+    const dfs = (i) => {
+        // 边界条件
+        if (i == len) {
+            ans.push([...p])
+            return
+        }
+        for (let j=0;j<len;j++) {
+            if (!on_path[j]) {
+                p[i] = nums[j]
+                on_path[j] = true
+                dfs(i + 1)
+                on_path[j] = false
+            }
+        }
+    }
+    dfs(0);
+    return ans
+};
+
+console.log(permute([1,2,3]))
