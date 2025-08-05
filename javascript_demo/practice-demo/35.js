@@ -1,29 +1,26 @@
-// 输入: candidates = [2,3,5], target = 8
-// 输出: [[2,2,2,2],[2,3,3],[3,5]]
+// 二分查找
 
-var combinationSum = function (candidates, target) {
-  const output = []
-  candidates = candidates.sort((a, b) => a - b)
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
 
-  const dfs = (an, index, res) => {
-    if (index === candidates.length) {
-        return
+var searchInsert = function (nums, target) {
+  let l = -1,
+    r = nums.length
+  while (l + 1 < r) {
+    let mid = Math.floor((l + r) / 2)
+    if (nums[mid] == target) {
+      return mid
     }
-    if (target === an) {
-        output.push(res)
-        return
+    if (nums[mid] < target) {
+      l = mid
+    } else {
+      r = mid
     }
-
-    for(let i = index; i < candidates.length; i++) {
-        if (an + candidates[i] > target) return
-        dfs(an + candidates[i],i, [...res, candidates[i]])
-    }
-    return res
   }
-
-  dfs(0, 0, [])
-  return output
+  return r
 };
 
-
-console.log(combinationSum([8,7,4,3], 11))
+console.log(searchInsert([], 1))
